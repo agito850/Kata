@@ -29,20 +29,61 @@ public class Tennis
         //2. 分數表達必須是文字例如Fifteen Forty 而非15：40 
         //3. 賽末點時 輸出為 Player Name Adv, 例：Sam Adv
         //4. 勝出時 輸出為 Player Name Win, 例：Sam Win
-        if(_playerOneScore == _playerTwoScore)
+        
+        if(IsSameScore())
         {
-            return _playerOneScore switch
-            {
-                0 => "Love All",
-                1 => "Fifteen All",
-                2 => "Thirty All",
-                3 => "Deuce",
-                _ => "??"
-            };
+           return IsDeuce()? Deuce() : SameScore();
         }
+        
+        return IsBothHaveAtLeastThreePoints() ? GetWinOrAdvPlayer() : DifferentScore();
+    }
+
+    private bool IsBothHaveAtLeastThreePoints()
+    {
+        return _playerOneScore >= 3 && _playerTwoScore >= 3;
+    }
+
+    private string DifferentScore()
+    {
         var playerOneScore = scoreDic[_playerOneScore];
         var playerTwoScore = scoreDic[_playerTwoScore];
         return playerOneScore + " " + playerTwoScore;
+    }
+
+    private static string Deuce()
+    {
+        return "Deuce";
+    }
+
+    private string SameScore()
+    {
+        return scoreDic[_playerOneScore] + " All";
+    }
+
+    private bool IsSameScore()
+    {
+        return _playerOneScore == _playerTwoScore;
+    }
+
+    private bool IsDeuce()
+    {
+        return IsSameScore() && _playerOneScore >= 3;
+    }
+
+    private string GetWinOrAdvPlayer()
+    {
+        return GetAdvPlayerName() + (IsAdv() ? " Adv" :" Win");
+    }
+
+    private bool IsAdv()
+    {
+        return Math.Abs(_playerOneScore - _playerTwoScore) == 1;
+    }
+
+    private string GetAdvPlayerName()
+    {
+        var advPlayer = _playerOneScore > _playerTwoScore ? _playerOneName : _playerTwoName;
+        return advPlayer;
     }
 
     public void PlayerOneScore()

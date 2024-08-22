@@ -11,7 +11,7 @@ public class TennisTest
     [SetUp]
     public void SetUp()
     {
-        _tennis = new Tennis("Sam Adv", "Sam Win");
+        _tennis = new Tennis("Sam1", "Sam2");
     }
     
     private void ScoreShouldBe(string expected)
@@ -104,4 +104,58 @@ public class TennisTest
         ScoreShouldBe("Deuce");
     }
     
+    [Test]
+    public void Sam1_Adv()
+    {
+        _tennis.PlayerOneScore();
+        _tennis.PlayerOneScore();
+        _tennis.PlayerOneScore();
+        _tennis.PlayerTwoScore();
+        _tennis.PlayerTwoScore();
+        _tennis.PlayerTwoScore();
+        _tennis.PlayerOneScore();
+        ScoreShouldBe("Sam1 Adv");
+    }
+    
+    [Test]
+    public void Sam1_Win()
+    {
+        _tennis.PlayerOneScore();
+        _tennis.PlayerOneScore();
+        _tennis.PlayerOneScore();
+        _tennis.PlayerTwoScore();
+        _tennis.PlayerTwoScore();
+        _tennis.PlayerTwoScore();
+        _tennis.PlayerOneScore();
+        _tennis.PlayerOneScore();
+        ScoreShouldBe("Sam1 Win");
+    }
+    
+    [Test]
+    public void Sam2_Adv()
+    {
+        _tennis.PlayerOneScore();
+        _tennis.PlayerOneScore();
+        _tennis.PlayerOneScore();
+        _tennis.PlayerTwoScore();
+        _tennis.PlayerTwoScore();
+        _tennis.PlayerTwoScore();
+        _tennis.PlayerTwoScore();
+        ScoreShouldBe("Sam2 Adv");
+    }
+
+    [Test]
+    public void Sam2_Win()
+    {
+        _tennis.PlayerOneScore();
+        _tennis.PlayerOneScore();
+        _tennis.PlayerOneScore();
+        _tennis.PlayerTwoScore();
+        _tennis.PlayerTwoScore();
+        _tennis.PlayerTwoScore();
+        _tennis.PlayerTwoScore();
+        _tennis.PlayerTwoScore();
+        ScoreShouldBe("Sam2 Win");
+    }
+
 }
