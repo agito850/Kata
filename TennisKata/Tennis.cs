@@ -35,32 +35,24 @@ public class Tennis
         {
             return IsBothMoreThanThreePoint() ? Deuce() : ScoreAll();
         }
-        else 
+        else
         {
             //非同分
 
-            //取得分數較高者的名字與分數
-            int leadingPlayerScore = GetLeadingScore();
-            string leadingPlayerName = GetLeadingPlayerName();
-
-
-            //判斷是否為 領先 : 兩人都3分以上且其中一方多一分
-            if (IsBothMoreThanThreePoint() && GetScoreGap() == 1)
+            if (GetLeadingScore() >= 4)
             {
-                return leadingPlayerName + " Adv";
-            }
-            //判斷是否為 勝利 : 
-            //其中一方為4分時 另一方為3分以下
-            //兩人都3分以上時 領先2分者
-            //合併 -> 有人領先2分且領先者分數>=4
-            if (leadingPlayerScore >= 4 && GetScoreGap() == 2)
-            {
-                return leadingPlayerName + " Win";
+                var end = GetScoreGap() == 1 ? " Adv" : " Win";
+                return GetLeadingPlayerName() + end;
             }
 
             //一般情況
-            return _scoreDic[_playerOneScore] + " " + _scoreDic[_playerTwoScore];
+            return GetNormalScoreDisplay();
         }
+    }
+
+    private string GetNormalScoreDisplay()
+    {
+        return _scoreDic[_playerOneScore] + " " + _scoreDic[_playerTwoScore];
     }
 
     private string ScoreAll()
@@ -102,7 +94,7 @@ public class Tennis
         return Math.Abs(_playerOneScore - _playerTwoScore);
     }
 
-    private static bool IsBothMoreThanThreePoint()
+    private bool IsBothMoreThanThreePoint()
     {
         return _playerOneScore >= 3 && _playerTwoScore >= 3;
     }
@@ -120,5 +112,17 @@ public class Tennis
     public void PlayerTwoScore()
     {
         _playerTwoScore++;
+    }
+
+    public void GiveScoreToPlayer(int givenScore, int player)
+    {
+        if (player == 1)
+        {
+            for (int i = 0; i < givenScore; i++) { PlayerOneScore(); }
+        }
+        else 
+        {
+            for (int i = 0; i < givenScore; i++) { PlayerTwoScore(); }
+        }
     }
 }
