@@ -30,60 +30,86 @@ public class Tennis
         //3. 賽末點時 輸出為 Player Name Adv, 例：Sam Adv
         //4. 勝出時 輸出為 Player Name Win, 例：Sam Win
 
-        //判斷是否為 平局 : 同分且3分以上
-        if (_playerOneScore >= 3 && _playerTwoScore >= 3 && _playerOneScore == _playerTwoScore)
+        //同分
+        if (IsSameScore())
         {
-            return "Deuce";
+            return IsBothMoreThanThreePoint() ? Deuce() : ScoreAll();
         }
-        
-        //判斷是否為 領先 : 兩人都3分以上且其中一方多一分
-        if (_playerOneScore >= 3 && _playerTwoScore >= 3 && Math.Abs(_playerOneScore -_playerTwoScore) == 1)
+        else 
         {
-            if (_playerOneScore > _playerTwoScore)
-            {
-                return _playerOneName + " Adv";
-            }
-            else 
-            {
-                return _playerTwoName + " Adv";
-            }
-        }
-        //判斷是否為 勝利 : 
-        //其中一方為4分時 另一方為3分以下
-        //兩人都3分以上時 領先2分者
-        //合併 -> 有人領先2分且領先者>=4
+            //非同分
 
-        var leadingPlayerScore = 0;
+            //取得分數較高者的名字與分數
+            int leadingPlayerScore = GetLeadingScore();
+            string leadingPlayerName = GetLeadingPlayerName();
+
+
+            //判斷是否為 領先 : 兩人都3分以上且其中一方多一分
+            if (IsBothMoreThanThreePoint() && GetScoreGap() == 1)
+            {
+                return leadingPlayerName + " Adv";
+            }
+            //判斷是否為 勝利 : 
+            //其中一方為4分時 另一方為3分以下
+            //兩人都3分以上時 領先2分者
+            //合併 -> 有人領先2分且領先者分數>=4
+            if (leadingPlayerScore >= 4 && GetScoreGap() == 2)
+            {
+                return leadingPlayerName + " Win";
+            }
+
+            //一般情況
+            return _scoreDic[_playerOneScore] + " " + _scoreDic[_playerTwoScore];
+        }
+    }
+
+    private string ScoreAll()
+    {
+        return _scoreDic[_playerOneScore] + " All";
+    }
+
+    private string Deuce()
+    {
+        return "Deuce";
+    }
+
+    private string GetLeadingPlayerName()
+    {
         if (_playerOneScore > _playerTwoScore)
         {
-            leadingPlayerScore = _playerOneScore;
+            return _playerOneName;
         }
         else
         {
-            leadingPlayerScore = _playerTwoScore;
+            return _playerTwoName;
         }
+    }
 
-        if (leadingPlayerScore >= 4 && Math.Abs(_playerOneScore - _playerTwoScore) == 2)
+    private int GetLeadingScore()
+    {
+        if (_playerOneScore > _playerTwoScore)
         {
-            if (_playerOneScore > _playerTwoScore)
-            {
-                return _playerOneName + " Win";
-            }
-            else
-            {
-                return _playerTwoName + " Win";
-            }
+            return _playerOneScore;
         }
-
-        //同分
-        if (_playerOneScore == _playerTwoScore) 
+        else
         {
-            return _scoreDic[_playerOneScore] + " All";
+            return _playerTwoScore;
         }
+    }
 
-        //一般情況
-        return _scoreDic[_playerOneScore] + " " + _scoreDic[_playerTwoScore];
+    private int GetScoreGap()
+    {
+        return Math.Abs(_playerOneScore - _playerTwoScore);
+    }
 
+    private static bool IsBothMoreThanThreePoint()
+    {
+        return _playerOneScore >= 3 && _playerTwoScore >= 3;
+    }
+
+    private bool IsSameScore()
+    {
+        return _playerOneScore == _playerTwoScore;
     }
 
     public void PlayerOneScore()
