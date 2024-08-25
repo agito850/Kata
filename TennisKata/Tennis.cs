@@ -3,9 +3,9 @@
 public class Tennis
 {
     private readonly string _playerOneName;
+    private readonly string _playerTwoName;
     private int _playerOneScore;
     private int _playerTwoScore;
-    private readonly string _playerTwoName;
 
 
     public Tennis(string playerOneName, string playerTwoName)
@@ -16,7 +16,7 @@ public class Tennis
         _playerTwoScore = 0;
     }
 
-    private Dictionary<int, string> _scoreDic = new Dictionary<int, string>() {
+    private readonly Dictionary<int, string> _scoreDic = new Dictionary<int, string>() {
         { 0,"Love"},
         { 1,"Fifteen"},
         { 2,"Thirty"},
@@ -35,19 +35,15 @@ public class Tennis
         {
             return IsBothMoreThanThreePoint() ? Deuce() : ScoreAll();
         }
-        else
+        //非同分
+        if (GetLeadingScore() >= 4)
         {
-            //非同分
-
-            if (GetLeadingScore() >= 4)
-            {
-                var end = GetScoreGap() == 1 ? " Adv" : " Win";
-                return GetLeadingPlayerName() + end;
-            }
-
-            //一般情況
-            return GetNormalScoreDisplay();
+            var end = GetScoreGap() == 1 ? " Adv" : " Win";
+            return GetLeadingPlayerName() + end;
         }
+
+        //一般情況
+        return GetNormalScoreDisplay();
     }
 
     private string GetNormalScoreDisplay()
@@ -60,33 +56,19 @@ public class Tennis
         return _scoreDic[_playerOneScore] + " All";
     }
 
-    private string Deuce()
+    private static string Deuce()
     {
         return "Deuce";
     }
 
     private string GetLeadingPlayerName()
     {
-        if (_playerOneScore > _playerTwoScore)
-        {
-            return _playerOneName;
-        }
-        else
-        {
-            return _playerTwoName;
-        }
+        return _playerOneScore > _playerTwoScore ? _playerOneName : _playerTwoName;
     }
 
     private int GetLeadingScore()
     {
-        if (_playerOneScore > _playerTwoScore)
-        {
-            return _playerOneScore;
-        }
-        else
-        {
-            return _playerTwoScore;
-        }
+        return _playerOneScore > _playerTwoScore ? _playerOneScore : _playerTwoScore;
     }
 
     private int GetScoreGap()
@@ -114,15 +96,9 @@ public class Tennis
         _playerTwoScore++;
     }
 
-    public void GiveScoreToPlayer(int givenScore, int player)
+    public void GiveScoreToPlayers(int givePlayerOneScore, int givePlayerTwoScore)
     {
-        if (player == 1)
-        {
-            for (int i = 0; i < givenScore; i++) { PlayerOneScore(); }
-        }
-        else 
-        {
-            for (int i = 0; i < givenScore; i++) { PlayerTwoScore(); }
-        }
+        for (var i = 0; i < givePlayerOneScore; i++) { PlayerOneScore(); }
+        for (var i = 0; i < givePlayerTwoScore; i++) { PlayerTwoScore(); }
     }
 }
