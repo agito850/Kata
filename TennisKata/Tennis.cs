@@ -30,19 +30,18 @@ public class Tennis
         //3. 賽末點時 輸出為 Player Name Adv, 例：Sam Adv
         //4. 勝出時 輸出為 Player Name Win, 例：Sam Win
 
-        //同分
+        
         if (IsSameScore())
         {
             return IsBothMoreThanThreePoint() ? Deuce() : ScoreAll();
         }
-        //非同分
+        
         if (GetLeadingScore() >= 4)
         {
             var end = GetScoreGap() == 1 ? " Adv" : " Win";
             return GetLeadingPlayerName() + end;
         }
-
-        //一般情況
+        
         return GetNormalScoreDisplay();
     }
 
